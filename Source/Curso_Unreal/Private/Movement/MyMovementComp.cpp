@@ -19,15 +19,28 @@ void UMyMovementComp::BeginPlay()
 	Super::BeginPlay();
 
 	NextLocation = GetOwner()->GetActorLocation();
-	GetOwner()->SetActorTickEnabled(false);
+	SetComponentTickEnabled(false);
 	
 }
 
 
 void UMyMovementComp::MoveToLocation(const FVector& TargetLocation)
 {
+	if(!OnArrivalToDestination.IsAlreadyBound(this, &UMyMovementComp::OnArrival))
+	{
+		OnArrivalToDestination.AddDynamic(this, &UMyMovementComp::OnArrival);
+	}
+
 	NextLocation = TargetLocation;
-	GetOwner()->SetActorTickEnabled(true);
+	SetComponentTickEnabled(true);
+}
+
+void UMyMovementComp::PrintLocationHistory() const
+{
+	for (const FVector& Location : LocationHistory)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, Location.ToString());
+	}
 }
 
 // Called every frame
@@ -41,9 +54,17 @@ void UMyMovementComp::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	if (FVector::Dist(NewLocation, NextLocation) < (MovementSpeed * DeltaTime))
 	{
 		NewLocation = NextLocation;
-		GetOwner()->SetActorTickEnabled(false);
+		LocationHistory.Emplace(NewLocation);
+		SetComponentTickEnabled(false);
+		OnArrivalToDestination.Broadcast(NewLocation);
+		OnArrivalToDestination.RemoveDynamic(this, &UMyMovementComp::OnArrival);
 	}
 	GetOwner()->SetActorLocation(NewLocation);
 
+}
+
+void UMyMovementComp::OnArrival(const FVector& destination)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, "XDXDXD");
 }
 
