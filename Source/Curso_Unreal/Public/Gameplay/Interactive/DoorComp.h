@@ -39,32 +39,3 @@ public:
 
 		
 };
-
-UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class CURSO_UNREAL_API UkeyComp : public UActorComponent
-{
-	GENERATED_BODY()
-
-public:
-	UkeyComp();
-
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Key")
-	TWeakObjectPtr<AActor> TargetDoorActor;
-
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-private:
-	mutable TWeakObjectPtr<UDoorComp> TargetDoor;
-
-public:
-	UFUNCTION(BlueprintCallable, Category = "Key")
-	UDoorComp* GetTargetDoor() const;
-
-	UFUNCTION(BlueprintCallable, Category = "Key")
-	void SetTargetDoor(UDoorComp* NewTargetDoor);
-
-	UFUNCTION(BlueprintCallable, Category = "Key")
-	bool UseKey();
-};

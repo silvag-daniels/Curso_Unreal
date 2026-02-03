@@ -65,6 +65,5 @@ void UMyMovementComp::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 void UMyMovementComp::OnArrival(const FVector& destination)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, "XDXDXD");
 }
 

@@ -2,6 +2,8 @@
 
 
 #include "Gameplay/Framework/InGamePlayerController.h"
+#include "Gameplay/Inventory/InventoryComp.h"
+#include "Gameplay/Inventory/InventoryItem.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
@@ -27,6 +29,7 @@ void AInGamePlayerController::SetupInputComponent()
 	Input->BindAction(InputConfig->SetDestinationClick, ETriggerEvent::Triggered, this, &AInGamePlayerController::OnMovementRequestTriggered);
 	Input->BindAction(InputConfig->SetDestinationClick, ETriggerEvent::Completed, this, &AInGamePlayerController::OnMovementRequestCompleted);
 	Input->BindAction(InputConfig->SetDestinationClick, ETriggerEvent::Canceled, this, &AInGamePlayerController::OnMovementRequestCompleted);
+	Input->BindAction(InputConfig->SetOpenInventory, ETriggerEvent::Started, this, &AInGamePlayerController::OnSetOpenInventoryClicked);
 	
 }
 
@@ -57,9 +60,11 @@ void AInGamePlayerController::OnMovementRequestCompleted()
 	if (FollowTime <= FollowTresholdTime)
 	{
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, CachedDestination);
-	}
-	
+	}	
+}
 
-
-	
+void AInGamePlayerController::OnSetOpenInventoryClicked()
+{
+	UInventoryComp* Inventory = GetPawn()->FindComponentByClass<UInventoryComp>();
+	OnOpenInventory.Broadcast(Inventory);
 }

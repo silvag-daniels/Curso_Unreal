@@ -22,11 +22,16 @@ public:
 	TObjectPtr<UInputAction> SetDestinationClick;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Framework")
 	TObjectPtr<UInputAction> SetDestinationTouch;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Framework")
+	TObjectPtr<UInputAction> SetOpenInventory;
 };
 
 /**
  * 
  */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOpenInvetory, UInventoryComp*, Items);
+
 UCLASS()
 class CURSO_UNREAL_API AInGamePlayerController : public APlayerController
 {
@@ -39,6 +44,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Framework")
 	float FollowTresholdTime = 0.5f;
 
+	UPROPERTY(BlueprintAssignable)
+	FOnOpenInvetory OnOpenInventory;
+
 protected:
 	FVector CachedDestination;
 	float FollowTime = 0.0f;
@@ -49,6 +57,7 @@ protected:
 	void OnMovementRequestStarted();
 	void OnMovementRequestTriggered();
 	void OnMovementRequestCompleted();
+	void OnSetOpenInventoryClicked();
 
 
 };
