@@ -18,7 +18,7 @@ void UInventoryItemWidget::SetItemData(UInventoryItemObject* ItemObject)
     {
     
         GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "ItemImage or QuantityItemText not found"); // debu
-        ItemAmount = FText::FromString(*GetClass()->GetName());
+        ItemAmount = FText::FromString("");
     }
 
     if (IsValid(ItemObject) && IsValid(ItemObject->ItemDefinition))

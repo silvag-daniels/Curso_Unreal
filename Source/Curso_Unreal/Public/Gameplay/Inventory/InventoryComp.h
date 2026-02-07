@@ -39,11 +39,17 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory")
 	int GetItemQuantity(UInventoryItemDefinition* ItemDefinition) const;
 
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory")
+	UInventoryItemObject* GetItemAt(int Index) const;
+
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	bool AddItem(UInventoryItemDefinition* ItemDefinition, int Quantity = 1);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	bool RemoveItem(UInventoryItemDefinition* ItemDefinition, int Quantity = 1);
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	bool RemoveItemAt(int Index, int Quantity = 1);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	void SortItems();		

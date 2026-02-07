@@ -39,6 +39,12 @@ void UInventoryComp::BeginPlay()
 			}
 		}
 	}
+
+	//Add empty slots
+	for(int i = Items.Num(); i < Size; i++)
+	{
+		Items.Add(nullptr);
+	}
 }
 
 bool UInventoryComp::AddItemOnEmptySlot(UInventoryItemDefinition* ItemDefinition, int Quantity)
@@ -104,8 +110,15 @@ int UInventoryComp::GetItemQuantity(UInventoryItemDefinition* ItemDefinition) co
 	return Quantity;
 }
 
+UInventoryItemObject* UInventoryComp::GetItemAt(int Index) const
+{
+	return Items[Index];
+}
+
 bool UInventoryComp::AddItem(UInventoryItemDefinition* ItemDefinition, int Quantity)
 {
+	check(ItemDefinition);
+	check(Quantity > 0);
 	int RemainingQuantity = Quantity;
 	//Check if the item is already in the inventory
 	for(TObjectPtr<UInventoryItemObject> Item : Items)
@@ -151,17 +164,41 @@ bool UInventoryComp::RemoveItem(UInventoryItemDefinition* ItemDefinition, int Qu
 			{
 				Item->StackAmount -= RemainingQuantity;
 				bRemoved = true;
+				if (Item->StackAmount == 0) {
+					Items[i] = nullptr;
+				}
 				break;
 			}
 		}
 	}
 
-	while (Items.Num() > 0 && Items.Last() == nullptr)
+	//Add empty slots
+	for(int i = Items.Num(); i < Size; i++)
 	{
-		Items.Pop();
+		Items.Add(nullptr);
 	}
 
 	return bRemoved;
+}
+
+bool UInventoryComp::RemoveItemAt(int Index, int Quantity)
+{
+	if (Index < Items.Num() && Items[Index])
+	{
+		if(Items[Index]->StackAmount < Quantity)
+		{
+			return false;
+		}
+		else
+		{
+			Items[Index]->StackAmount -= Quantity;
+			if (Items[Index]->StackAmount == 0) {
+				Items[Index] = nullptr;
+			}
+			return true;
+		}
+	}
+	return false;
 }
 
 bool LesserItem(const TObjectPtr<UInventoryItemObject>& A, const  TObjectPtr <UInventoryItemObject>& B)
@@ -172,8 +209,4 @@ bool LesserItem(const TObjectPtr<UInventoryItemObject>& A, const  TObjectPtr <UI
 void UInventoryComp::SortItems()
 {
 	Items.Sort(&LesserItem);
-	while (Items.Num() > 0 && Items.Last() == nullptr)
-	{
-		Items.Pop();
-	}
 }
