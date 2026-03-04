@@ -36,6 +36,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay | Interaction")
 	bool bDestroyOnPick = true;
 
+	UPROPERTY(BlueprintReadWrite, Category = "Gameplay | Interaction")
+	bool ValidPicker;
+
 	UFUNCTION(BlueprintCallable, Category = "Gameplay | Interaction")
 	void PickUp(AActor* Instigator);
 

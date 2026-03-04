@@ -36,7 +36,7 @@ void UPickableComp::BeginPlay()
 void UPickableComp::PickUp(AActor* Instigator)
 {
 	OnPickedUp.Broadcast(Instigator);
-	if (bDestroyOnPick)
+	if (bDestroyOnPick && ValidPicker)
 	{
 		GetOwner()->Destroy();
 	}
