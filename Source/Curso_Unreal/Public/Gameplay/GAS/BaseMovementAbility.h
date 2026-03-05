@@ -59,7 +59,9 @@ protected:
 	float TresholdTime = 0.0f;
 	float FollowTime = 0.0f;
 	bool bIsPerformingSMTL = false;
+	bool bIsPerformingChase = false;
 	FVector Destination = FVector::ZeroVector;
 	TWeakObjectPtr<ACharacter> MyCharacter;
 	TWeakObjectPtr<APlayerController> MyPlayerController;
+	TWeakObjectPtr<class UTargetingComp> Target;
 };

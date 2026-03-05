@@ -3,6 +3,8 @@
 
 #include "Gameplay/GAS/BaseMovementAbility.h"
 #include "Gameplay/Combat/TargetingComp.h"
+#include "Gameplay/Combat/CombatComp.h"
+#include "Gameplay/GAS/CharacterAttributeSet.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -133,7 +135,18 @@ void UBaseMovementAbilityTask::NotifyInputReleased()
 {
 	if (FollowTime < TresholdTime && !bIsPerformingSMTL)
 	{
-		UAIBlueprintHelperLibrary::SimpleMoveToLocation(MyPlayerController.Get(), Destination);
+		UCombatComp* CombatComp = MyCharacter->GetComponentByClass<UCombatComp>();
+		Target = CombatComp->GetTarget();
+
+		if (Target.IsValid())
+		{
+			UAIBlueprintHelperLibrary::SimpleMoveToActor(MyPlayerController.Get(), Target->GetOwner());
+			bIsPerformingChase = true;
+		}
+		else
+		{
+			UAIBlueprintHelperLibrary::SimpleMoveToLocation(MyPlayerController.Get(), Destination);
+		}
 		bIsPerformingSMTL = true;
 	}
 	else
@@ -149,8 +162,24 @@ void UBaseMovementAbilityTask::TickTask(float DeltaTime)
 	if (bIsPerformingSMTL)
 	{
 		bool bIsMoving = MyCharacter->GetCharacterMovement()->Velocity.SizeSquared() > UCharacterMovementComponent::BRAKE_TO_STOP_VELOCITY;
+		bool bIsCloseToTarget = false;
 
-		if (!bIsMoving)
+		if(bIsPerformingChase)
+		{
+			UAbilitySystemComponent* ASC = Ability->GetAbilitySystemComponentFromActorInfo();
+
+			if (ASC)
+			{
+				float attackRange = ASC->GetNumericAttribute(UCharacterAttributeSet::GetAttackRangeAttribute());
+				bIsCloseToTarget = (Target->GetOwner()->GetActorLocation() - MyCharacter->GetActorLocation()).SizeSquared() < attackRange;
+			}
+		}
+		else
+		{
+			bIsCloseToTarget = (MyCharacter->GetActorLocation() - Destination).SizeSquared() < 100.f;
+		}
+
+		if (!bIsMoving || bIsCloseToTarget)
 		{
 			NotifyInputReleased();
 		}
