@@ -31,7 +31,6 @@ void AInGamePlayerController::SetupInputComponent()
 	UEnhancedInputComponent* Input = CastChecked<UEnhancedInputComponent>(InputComponent);
 
 	Input->BindAction(InputConfig->SetDestinationClick, ETriggerEvent::Started, this, &AInGamePlayerController::OnMovementRequestStarted);
-	Input->BindAction(InputConfig->SetDestinationClick, ETriggerEvent::Triggered, this, &AInGamePlayerController::OnMovementRequestTriggered);
 	Input->BindAction(InputConfig->SetDestinationClick, ETriggerEvent::Completed, this, &AInGamePlayerController::OnMovementRequestCompleted);
 	Input->BindAction(InputConfig->SetDestinationClick, ETriggerEvent::Canceled, this, &AInGamePlayerController::OnMovementRequestCompleted);
 	Input->BindAction(InputConfig->SetOpenInventory, ETriggerEvent::Started, this, &AInGamePlayerController::OnSetOpenInventoryClicked);
@@ -73,24 +72,17 @@ void AInGamePlayerController::OnMovementRequestStarted()
 		UCombatComp* CombatComp = GetPawn()->FindComponentByClass<UCombatComp>();
 		EventData.OptionalObject = CombatComp->GetTarget();
 		EventData.EventTag = FGameplayTag::RequestGameplayTag("Abilities.Movement.Base");
+
+		for (const FGameplayAbilitySpec& Spec : ASC->GetActivatableAbilities())
+		{
+			if (Spec.Ability && Spec.Ability->AbilityTags.HasTagExact(FGameplayTag::RequestGameplayTag("Abilities.Movement.Base")))
+			{
+				ASC->CancelAbilityHandle(Spec.Handle);
+			}
+		}
+
 		ASC->HandleGameplayEvent(EventData.EventTag, &EventData);
 	}
-}
-
-void AInGamePlayerController::OnMovementRequestTriggered()
-{
-	/*FHitResult HitResult;
-
-	FollowTime += GetWorld()->GetDeltaSeconds();
-
-	if (GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, HitResult))
-	{
-		CachedDestination = HitResult.Location;
-	}
-
-
-	FVector Destination = (CachedDestination - GetPawn()->GetActorLocation()).GetSafeNormal();
-	GetPawn()->AddMovementInput(Destination);*/
 }
 
 void AInGamePlayerController::OnMovementRequestCompleted()
@@ -106,6 +98,5 @@ void AInGamePlayerController::OnMovementRequestCompleted()
 
 void AInGamePlayerController::OnSetOpenInventoryClicked()
 {
-	/*UInventoryComp* Inventory = GetPawn()->FindComponentByClass<UInventoryComp>();
-	OnOpenInventory.Broadcast(Inventory);*/
+	
 }

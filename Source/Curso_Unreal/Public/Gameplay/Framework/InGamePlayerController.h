@@ -56,7 +56,6 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 
 	void OnMovementRequestStarted();
-	void OnMovementRequestTriggered();
 	void OnMovementRequestCompleted();
 	void OnSetOpenInventoryClicked();
 
