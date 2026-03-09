@@ -4,6 +4,7 @@
 #include "Gameplay/GAS/BaseMovementAbility.h"
 #include "Gameplay/Combat/TargetingComp.h"
 #include "Gameplay/Combat/CombatComp.h"
+#include "Gameplay/Framework/InGamePlayerController.h"
 #include "Gameplay/GAS/CharacterAttributeSet.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "GameFramework/Character.h"
@@ -171,12 +172,14 @@ void UBaseMovementAbilityTask::TickTask(float DeltaTime)
 			if (ASC)
 			{
 				float attackRange = ASC->GetNumericAttribute(UCharacterAttributeSet::GetAttackRangeAttribute());
-				bIsCloseToTarget = (Target->GetOwner()->GetActorLocation() - MyCharacter->GetActorLocation()).SizeSquared() < attackRange;
+				bIsCloseToTarget = FVector::Dist(Target->GetOwner()->GetActorLocation(), MyCharacter->GetActorLocation()) < attackRange;
 			}
 		}
-		else
+
+		if (bIsCloseToTarget)
 		{
-			bIsCloseToTarget = (MyCharacter->GetActorLocation() - Destination).SizeSquared() < 100.f;
+			FGameplayTag AbilityTag = Ability->AbilityTags.Last();
+			Cast<AInGamePlayerController>(MyPlayerController)->NotifyDestinationReached(AbilityTag, false);
 		}
 
 		if (!bIsMoving || bIsCloseToTarget)

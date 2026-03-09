@@ -59,8 +59,7 @@ void AInGamePlayerController::Tick(float DeltaTime)
 
 void AInGamePlayerController::OnMovementRequestStarted()
 {
-	/*StopMovement();
-	FollowTime = 0.f;*/
+	Target = nullptr;
 
 	UAbilitySystemComponent* ASC = GetPawn()->GetComponentByClass<UAbilitySystemComponent>();
 	FGameplayTagContainer GameplayTags(FGameplayTag::RequestGameplayTag("Abilities.Movement.Base"));
@@ -94,9 +93,30 @@ void AInGamePlayerController::OnMovementRequestCompleted()
 		EventData.EventTag = FGameplayTag::RequestGameplayTag("Abilities.Movement.NotifyInputFinished");
 		ASC->HandleGameplayEvent(EventData.EventTag, &EventData);
 	}
+
+	UCombatComp* CombatComp = GetPawn()->FindComponentByClass<UCombatComp>();
+	Target = CombatComp->GetTarget();
 }
 
 void AInGamePlayerController::OnSetOpenInventoryClicked()
 {
 	
+}
+
+void AInGamePlayerController::NotifyDestinationReached(const FGameplayTag& AbilityTag, bool bEndAbility)
+{
+	UAbilitySystemComponent* ASC = GetPawn()->GetComponentByClass<UAbilitySystemComponent>();
+	if (bEndAbility)
+	{
+		for (const FGameplayAbilitySpec& Spec : ASC->GetActivatableAbilities())
+		{
+			if (Spec.Ability && Spec.Ability->AbilityTags.HasTagExact(AbilityTag))
+			{
+				ASC->CancelAbilityHandle(Spec.Handle);
+			}
+		}
+	}
+
+	FGameplayTagContainer AttackTags(FGameplayTag::RequestGameplayTag("Abilities.Attack.Base"));
+	ASC->TryActivateAbilitiesByTag(AttackTags);
 }

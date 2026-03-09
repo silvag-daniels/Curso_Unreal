@@ -30,6 +30,8 @@ public:
  * 
  */
 
+class UGameplayEffect;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOpenInvetory, UInventoryComp*, Items);
 
 UCLASS()
@@ -41,6 +43,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Framework")
 	TObjectPtr<UInGameInputConfig> InputConfig;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Framework")
+	TSubclassOf<UGameplayEffect> AttackDamageEffect;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Framework")
 	float FollowTresholdTime = 0.5f;
 
@@ -50,6 +55,7 @@ public:
 protected:
 	FVector CachedDestination;
 	float FollowTime = 0.0f;
+	TObjectPtr<class UTargetingComp> Target = nullptr;
 
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -58,6 +64,14 @@ protected:
 	void OnMovementRequestStarted();
 	void OnMovementRequestCompleted();
 	void OnSetOpenInventoryClicked();
+
+public:
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Gameplay")
+	UTargetingComp* GetTarget() const { return Target; }
+
+	UFUNCTION(BlueprintCallable, Category = "Gameplay")
+	void NotifyDestinationReached(const FGameplayTag& AbilityTag, bool bEndAbility = true);
 
 
 };
