@@ -39,6 +39,12 @@ void UBaseAttackAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 		UGameplayEffect* GameplayEffect = NewObject<UGameplayEffect>(ASC, PlayerController->AttackDamageEffect);
 
 		ASC->ApplyGameplayEffectToTarget(GameplayEffect, TargetASC, 1.0f, ContextHandle);
+		FGameplayCueParameters CueParams;
+		CueParams.Instigator = Character;
+		CueParams.Location = Character->GetActorLocation();
+		CueParams.TargetAttachComponent = Character->GetRootComponent();
+
+		TargetASC->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Combat.Attack"), CueParams);
 	}
 
 	
