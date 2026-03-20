@@ -73,7 +73,6 @@ void UBaseMovementAbility::NotiifyInputReleased()
 	if (BaseMovementTask)
 	{
 		BaseMovementTask->NotifyInputReleased();
-
 	}
 }
 
@@ -179,6 +178,8 @@ void UBaseMovementAbilityTask::TickTask(float DeltaTime)
 		if (bIsCloseToTarget)
 		{
 			FGameplayTag AbilityTag = Ability->AbilityTags.Last();
+			UCombatComp* CombatComp = MyCharacter->FindComponentByClass<UCombatComp>();
+			CombatComp->SetTarget(Target.Get());
 			Cast<AInGamePlayerController>(MyPlayerController)->NotifyDestinationReached(AbilityTag, false);
 		}
 

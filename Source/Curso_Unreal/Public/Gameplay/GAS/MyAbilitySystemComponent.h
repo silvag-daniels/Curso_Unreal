@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnAttributeValueChanged, AActor*, AttributeOwner, const FString&, AttributeName, float, OldValue, float, NewValue);
+
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class CURSO_UNREAL_API UMyAbilitySystemComponent : public UAbilitySystemComponent
 {
@@ -19,6 +22,10 @@ public:
 	TArray<TSubclassOf<UGameplayAbility>> InitialAbilities;
 
 	virtual void InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor) override;
+
+
+	UPROPERTY(BlueprintAssignable, Category = "Attributes")
+	FOnAttributeValueChanged OnAttributeValueChanged;
 
 private:
 	void GrantInitialAbilities();

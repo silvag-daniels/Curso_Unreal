@@ -86,6 +86,9 @@ void AInGamePlayerController::OnMovementRequestStarted()
 
 void AInGamePlayerController::OnMovementRequestCompleted()
 {
+	UCombatComp* CombatComp = GetPawn()->FindComponentByClass<UCombatComp>();
+	Target = CombatComp->GetTarget();
+
 	UAbilitySystemComponent* ASC = GetPawn()->GetComponentByClass<UAbilitySystemComponent>();
 	if (ASC)
 	{
@@ -94,8 +97,6 @@ void AInGamePlayerController::OnMovementRequestCompleted()
 		ASC->HandleGameplayEvent(EventData.EventTag, &EventData);
 	}
 
-	UCombatComp* CombatComp = GetPawn()->FindComponentByClass<UCombatComp>();
-	Target = CombatComp->GetTarget();
 }
 
 void AInGamePlayerController::OnSetOpenInventoryClicked()
