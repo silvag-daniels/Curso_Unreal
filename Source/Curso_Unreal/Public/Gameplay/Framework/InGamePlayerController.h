@@ -24,6 +24,8 @@ public:
 	TObjectPtr<UInputAction> SetDestinationTouch;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Framework")
 	TObjectPtr<UInputAction> SetOpenInventory;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Framework")
+	TObjectPtr<UInputAction> SetThrowBomb;
 };
 
 /**
@@ -64,6 +66,7 @@ protected:
 	void OnMovementRequestStarted();
 	void OnMovementRequestCompleted();
 	void OnSetOpenInventoryClicked();
+	void OnSetThrowBombClicked();
 
 public:
 

@@ -34,6 +34,7 @@ void AInGamePlayerController::SetupInputComponent()
 	Input->BindAction(InputConfig->SetDestinationClick, ETriggerEvent::Completed, this, &AInGamePlayerController::OnMovementRequestCompleted);
 	Input->BindAction(InputConfig->SetDestinationClick, ETriggerEvent::Canceled, this, &AInGamePlayerController::OnMovementRequestCompleted);
 	Input->BindAction(InputConfig->SetOpenInventory, ETriggerEvent::Started, this, &AInGamePlayerController::OnSetOpenInventoryClicked);
+	Input->BindAction(InputConfig->SetThrowBomb, ETriggerEvent::Started, this, &AInGamePlayerController::OnSetThrowBombClicked);
 	
 }
 
@@ -119,5 +120,20 @@ void AInGamePlayerController::NotifyDestinationReached(const FGameplayTag& Abili
 	}
 
 	FGameplayTagContainer AttackTags(FGameplayTag::RequestGameplayTag("Abilities.Attack.Base"));
+	ASC->TryActivateAbilitiesByTag(AttackTags);
+}
+
+void AInGamePlayerController::OnSetThrowBombClicked()
+{
+	UAbilitySystemComponent* ASC = GetPawn()->GetComponentByClass<UAbilitySystemComponent>();
+	for (const FGameplayAbilitySpec& Spec : ASC->GetActivatableAbilities())
+	{
+		if (Spec.Ability && Spec.Ability->AbilityTags.HasTag(FGameplayTag::RequestGameplayTag("Abilities")))
+		{
+			ASC->CancelAbilityHandle(Spec.Handle);
+		}
+	}
+
+	FGameplayTagContainer AttackTags(FGameplayTag::RequestGameplayTag("Abilities.Attack.ThrowBomb"));
 	ASC->TryActivateAbilitiesByTag(AttackTags);
 }
