@@ -49,7 +49,7 @@ void UThrowBombAbility::OnGameplayEventReceived(const FGameplayEventData Payload
 	//Spawn bomb and throw it
 	ACharacter* Character = Cast<ACharacter>(GetCurrentActorInfo()->AvatarActor.Get());
 
-	FVector SpawnLocation = Character->GetActorLocation();
+	FVector SpawnLocation = Character->GetActorLocation() + Character->GetActorForwardVector() * 100.f;
 	FRotator SpawnRotation = Character->GetActorRotation();
 
 	FActorSpawnParameters SpawnParams;
@@ -70,6 +70,8 @@ void UThrowBombAbility::OnGameplayEventReceived(const FGameplayEventData Payload
 		float ThrowUpwardForce = ASC->GetNumericAttribute(UCharacterAttributeSet::GetThrowUpwardForceAttribute());
 		FVector ThrowDirection = Character->GetActorForwardVector() * ThrowStrength + FVector(0, 0, ThrowUpwardForce);
 		BombMesh->AddImpulse(ThrowDirection, NAME_None, true);
+		UInventoryComp* InventoryComp = Character->GetComponentByClass<UInventoryComp>();
+		InventoryComp->RemoveItem(BombItem, 1);
 	}
 }
 

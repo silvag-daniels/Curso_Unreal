@@ -5,7 +5,7 @@
 #include "Gameplay/Combat/TargetingComp.h"
 #include "Gameplay/Combat/CombatComp.h"
 #include "Gameplay/Framework/InGamePlayerController.h"
-#include "Gameplay/GAS/CharacterAttributeSet.h"
+#include "Gameplay/GAS/DamageAttributeSet.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -170,7 +170,7 @@ void UBaseMovementAbilityTask::TickTask(float DeltaTime)
 
 			if (ASC)
 			{
-				float attackRange = ASC->GetNumericAttribute(UCharacterAttributeSet::GetAttackRangeAttribute());
+				float attackRange = ASC->GetNumericAttribute(UDamageAttributeSet::GetAttackRangeAttribute());
 				bIsCloseToTarget = FVector::Dist(Target->GetOwner()->GetActorLocation(), MyCharacter->GetActorLocation()) < attackRange;
 			}
 		}

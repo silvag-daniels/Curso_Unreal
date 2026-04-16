@@ -27,14 +27,6 @@ public:
 	ATTRIBUTE_ACCESSORS(UCharacterAttributeSet, MovementSpeed);
 
 	UPROPERTY(BlueprintReadOnly, Category = "Attributes")
-	FGameplayAttributeData AttackRange;
-	ATTRIBUTE_ACCESSORS(UCharacterAttributeSet, AttackRange);
-
-	UPROPERTY(BlueprintReadOnly, Category = "Attributes")
-	FGameplayAttributeData AttackDamage;
-	ATTRIBUTE_ACCESSORS(UCharacterAttributeSet, AttackDamage);
-
-	UPROPERTY(BlueprintReadOnly, Category = "Attributes")
 	FGameplayAttributeData AttackSpeed;
 	ATTRIBUTE_ACCESSORS(UCharacterAttributeSet, AttackSpeed);
 

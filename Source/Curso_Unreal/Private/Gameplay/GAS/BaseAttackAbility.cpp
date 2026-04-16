@@ -7,7 +7,7 @@
 #include "AbilitySystemComponent.h"
 #include "Gameplay/Framework/InGamePlayerController.h"
 #include "Gameplay/Combat/CombatComp.h"
-#include "Gameplay/GAS/CharacterAttributeSet.h"
+#include "Gameplay/GAS/DamageAttributeSet.h"
 #include "Abilities/Tasks/AbilityTask_WaitGameplayEvent.h"
 
 UBaseAttackAbility::UBaseAttackAbility()
@@ -109,7 +109,7 @@ bool UBaseAttackAbility::CanActivateAbility(const FGameplayAbilitySpecHandle Han
 
 	if (ASC)
 	{
-		AttackRange = ASC->GetNumericAttribute(UCharacterAttributeSet::GetAttackRangeAttribute());
+		AttackRange = ASC->GetNumericAttribute(UDamageAttributeSet::GetAttackRangeAttribute());
 	}
 
 	const float DistanceToTarget = FVector::Dist(Character->GetActorLocation(), CombatComp->GetTarget()->GetOwner()->GetActorLocation());
