@@ -33,7 +33,6 @@ void AInGamePlayerController::SetupInputComponent()
 	Input->BindAction(InputConfig->SetDestinationClick, ETriggerEvent::Started, this, &AInGamePlayerController::OnMovementRequestStarted);
 	Input->BindAction(InputConfig->SetDestinationClick, ETriggerEvent::Completed, this, &AInGamePlayerController::OnMovementRequestCompleted);
 	Input->BindAction(InputConfig->SetDestinationClick, ETriggerEvent::Canceled, this, &AInGamePlayerController::OnMovementRequestCompleted);
-	Input->BindAction(InputConfig->SetOpenInventory, ETriggerEvent::Started, this, &AInGamePlayerController::OnSetOpenInventoryClicked);
 	Input->BindAction(InputConfig->SetThrowBomb, ETriggerEvent::Started, this, &AInGamePlayerController::OnSetThrowBombClicked);
 	
 }
@@ -60,6 +59,11 @@ void AInGamePlayerController::Tick(float DeltaTime)
 
 void AInGamePlayerController::OnMovementRequestStarted()
 {
+	if (bInventoryOpen)
+	{
+		return;
+	}
+
 	Target = nullptr;
 
 	UAbilitySystemComponent* ASC = GetPawn()->GetComponentByClass<UAbilitySystemComponent>();
@@ -100,11 +104,6 @@ void AInGamePlayerController::OnMovementRequestCompleted()
 
 }
 
-void AInGamePlayerController::OnSetOpenInventoryClicked()
-{
-	
-}
-
 void AInGamePlayerController::NotifyDestinationReached(const FGameplayTag& AbilityTag, bool bEndAbility)
 {
 	UAbilitySystemComponent* ASC = GetPawn()->GetComponentByClass<UAbilitySystemComponent>();
@@ -123,8 +122,18 @@ void AInGamePlayerController::NotifyDestinationReached(const FGameplayTag& Abili
 	ASC->TryActivateAbilitiesByTag(AttackTags);
 }
 
+void AInGamePlayerController::NotifyChangeOpenInventory()
+{
+	bInventoryOpen = !bInventoryOpen;
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, bInventoryOpen ? "Inventory Open" : "Inventory Close");
+}
+
 void AInGamePlayerController::OnSetThrowBombClicked()
 {
+	if (bInventoryOpen)
+	{
+		return;
+	}
 	UAbilitySystemComponent* ASC = GetPawn()->GetComponentByClass<UAbilitySystemComponent>();
 	for (const FGameplayAbilitySpec& Spec : ASC->GetActivatableAbilities())
 	{

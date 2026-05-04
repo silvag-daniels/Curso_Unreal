@@ -23,8 +23,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Framework")
 	TObjectPtr<UInputAction> SetDestinationTouch;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Framework")
-	TObjectPtr<UInputAction> SetOpenInventory;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Framework")
 	TObjectPtr<UInputAction> SetThrowBomb;
 };
 
@@ -58,6 +56,7 @@ protected:
 	FVector CachedDestination;
 	float FollowTime = 0.0f;
 	TObjectPtr<class UTargetingComp> Target = nullptr;
+	bool bInventoryOpen = false;
 
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -75,6 +74,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Gameplay")
 	void NotifyDestinationReached(const FGameplayTag& AbilityTag, bool bEndAbility = true);
+
+	UFUNCTION(BlueprintCallable)
+	void NotifyChangeOpenInventory();
 
 
 };
