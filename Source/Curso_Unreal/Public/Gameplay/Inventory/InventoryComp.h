@@ -31,7 +31,10 @@ protected:
 	UFUNCTION()
 	bool AddItemOnEmptySlot(UInventoryItemDefinition* ItemDefinition, int Quantity);
 
-public:	
+public:
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	const bool IsEmpty() const;
 	
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	const TArray< UInventoryItemObject* >& GetItems() const;

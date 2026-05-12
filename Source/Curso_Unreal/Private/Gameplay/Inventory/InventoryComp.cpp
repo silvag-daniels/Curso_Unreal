@@ -92,6 +92,18 @@ bool UInventoryComp::AddItemOnEmptySlot(UInventoryItemDefinition* ItemDefinition
 	return false;
 }
 
+const bool UInventoryComp::IsEmpty() const
+{
+	for(TObjectPtr<UInventoryItemObject> Item : Items)
+	{
+		if (Item)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 const TArray< UInventoryItemObject* >& UInventoryComp::GetItems() const
 {
 	return Items;
