@@ -59,7 +59,7 @@ void AInGamePlayerController::Tick(float DeltaTime)
 
 void AInGamePlayerController::OnMovementRequestStarted()
 {
-	if (bInventoryOpen)
+	if (bFreezePlayer)
 	{
 		return;
 	}
@@ -122,15 +122,14 @@ void AInGamePlayerController::NotifyDestinationReached(const FGameplayTag& Abili
 	ASC->TryActivateAbilitiesByTag(AttackTags);
 }
 
-void AInGamePlayerController::NotifyChangeOpenInventory()
+void AInGamePlayerController::NotifyChangeFreezeCharacter()
 {
-	bInventoryOpen = !bInventoryOpen;
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, bInventoryOpen ? "Inventory Open" : "Inventory Close");
+	bFreezePlayer = !bFreezePlayer;
 }
 
 void AInGamePlayerController::OnSetThrowBombClicked()
 {
-	if (bInventoryOpen)
+	if (bFreezePlayer)
 	{
 		return;
 	}
