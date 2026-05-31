@@ -52,6 +52,7 @@ bool UKeyComp::UseKey()
 	if (TargetDoor.IsValid())
 	{
 		TargetDoor->RemoveLock();
+		bKeyUsed = true;
 		return true;
 	}
 

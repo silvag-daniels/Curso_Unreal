@@ -36,6 +36,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Door")
 	bool IsLocked() const;
 
-
-		
+	UFUNCTION(BlueprintCallable, Category="Door")
+	void ForceUnlock();
 };

@@ -19,6 +19,9 @@ public:
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Key")
 	TWeakObjectPtr<AActor> TargetDoorActor;
 
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Key")
+	bool bKeyUsed = false;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -29,6 +32,9 @@ private:
 public:
 	UFUNCTION(BlueprintCallable, Category = "Key")
 	UDoorComp* GetTargetDoor() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Key")
+	bool IsKeyUsed() const { return bKeyUsed; }
 
 	UFUNCTION(BlueprintCallable, Category = "Key")
 	void SetTargetDoor(UDoorComp* NewTargetDoor);

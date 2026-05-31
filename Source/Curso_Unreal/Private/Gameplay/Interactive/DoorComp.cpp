@@ -31,3 +31,8 @@ bool UDoorComp::IsLocked() const
 {
 	return RequiredKeys > 0;
 }
+
+void UDoorComp::ForceUnlock()
+{
+	RequiredKeys = 0;
+}
