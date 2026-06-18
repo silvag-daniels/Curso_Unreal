@@ -40,9 +40,6 @@ void UPickableComp::PickUp(AActor* Instigator)
 	{
 		GetOwner()->Destroy();
 	}
-	else {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,"Pickup Failed");
-	}
 }
 
 void UPickableComp::OnShapeOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
