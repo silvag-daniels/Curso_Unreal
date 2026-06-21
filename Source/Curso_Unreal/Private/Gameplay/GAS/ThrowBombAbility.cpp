@@ -101,7 +101,6 @@ bool UThrowBombAbility::CanActivateAbility(const FGameplayAbilitySpecHandle Hand
 
 	if (InventoryComp->GetItemQuantity(BombItem) < 1)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "No bomb in inventory");
 		return false;
 	}
 
