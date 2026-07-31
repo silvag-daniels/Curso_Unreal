@@ -171,6 +171,11 @@ void UBaseMovementAbilityTask::TickTask(float DeltaTime)
 			if (ASC)
 			{
 				float attackRange = ASC->GetNumericAttribute(UDamageAttributeSet::GetAttackRangeAttribute());
+				if (!IsValid(Target.Get()) || !IsValid(Target->GetOwner()) || !IsValid(MyCharacter.Get()))
+				{
+					EndTask();
+					return;
+				}
 				bIsCloseToTarget = FVector::Dist(Target->GetOwner()->GetActorLocation(), MyCharacter->GetActorLocation()) < attackRange;
 			}
 		}
